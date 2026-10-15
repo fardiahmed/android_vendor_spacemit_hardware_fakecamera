@@ -1,0 +1,2 @@
+# Run the fake camera provider in the stock camera HAL domain.
+/vendor/bin/hw/android\.hardware\.camera\.provider-service\.fakecamera    u:object_r:hal_camera_default_exec:s0

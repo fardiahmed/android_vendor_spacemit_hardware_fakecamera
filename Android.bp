@@ -1,0 +1,60 @@
+// Lean, board-neutral fake camera AIDL HAL: presents back + front virtual
+// cameras fed from JPEG files under /data/vendor/camera. Written from scratch
+// (AOSP external camera + EmulatedCamera used only as references).
+
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+cc_binary {
+    name: "android.hardware.camera.provider-service.fakecamera",
+    relative_install_path: "hw",
+    vendor: true,
+    init_rc: ["fakecamera-service.rc"],
+    vintf_fragments: ["fakecamera.xml"],
+
+    local_include_dirs: ["include"],
+
+    srcs: ["src/*.cpp"],
+
+    shared_libs: [
+        "android.hardware.camera.common-V1-ndk",
+        "android.hardware.camera.device-V3-ndk",
+        "android.hardware.camera.metadata-V3-ndk",
+        "android.hardware.camera.provider-V3-ndk",
+        "libbinder_ndk",
+        "libcamera_metadata",
+        "libcutils",
+        "libfmq",
+        "libgralloctypes",
+        "libhardware",
+        "libhidlbase",
+        "libhidlmemory",
+        "libjpeg",
+        "liblog",
+        "libsync",
+        "libui",
+        "libutils",
+        "libyuv",
+    ],
+
+    static_libs: [
+        "android.hardware.camera.common@1.0-helper",
+        "libaidlcommonsupport",
+    ],
+
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wextra",
+    ],
+}
+
+// 1080p video profiles for both virtual cameras, installed as the device's
+// /vendor/etc/media_profiles_V1_0.xml
+prebuilt_etc {
+    name: "media_profiles_fakecamera",
+    vendor: true,
+    src: "media_profiles_fakecamera.xml",
+    filename: "media_profiles_V1_0.xml",
+}
