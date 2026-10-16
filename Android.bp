@@ -51,10 +51,30 @@ cc_binary {
 }
 
 // 1080p video profiles for both virtual cameras, installed as the device's
-// /vendor/etc/media_profiles_V1_0.xml
-prebuilt_etc {
+// /vendor/etc/media_profiles_V1_0.xml. Gated on FAKE_CAMERA_CUSTOM so its install
+// rule exists only when enabled; otherwise it collides with the default
+// media_profiles copy in device-common.mk.
+soong_config_bool_variable {
+    name: "fake_camera_custom",
+}
+
+soong_config_module_type {
+    name: "fakecamera_prebuilt_etc",
+    module_type: "prebuilt_etc",
+    config_namespace: "spacemit",
+    variables: ["fake_camera_custom"],
+    properties: ["enabled"],
+}
+
+fakecamera_prebuilt_etc {
     name: "media_profiles_fakecamera",
     vendor: true,
     src: "media_profiles_fakecamera.xml",
     filename: "media_profiles_V1_0.xml",
+    enabled: false,
+    soong_config_variables: {
+        fake_camera_custom: {
+            enabled: true,
+        },
+    },
 }
